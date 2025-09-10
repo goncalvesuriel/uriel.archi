@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dimensionamento Hidráulico - uriel.archi</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .input-group { margin: 10px 0; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Dimensionamento Hidráulico - Água Fria</h1>
+    
+    <!-- Formulário de entrada -->
+    <div>
+        <label>Trecho:</label>
+        <input type="text" id="trecho">
+        <label>ΣP:</label>
+        <input type="number" id="somaP">
+        <button onclick="calcular()">Calcular</button>
+    </div>
+
+    <!-- Tabela de resultados -->
+    <table id="resultados">
+        <thead>
+            <tr>
+                <th>Trecho</th> <th>ΣP</th> <th>Q (L/s)</th> <th>Q (m³/s)</th> <th>D (mm)</th> <th>D (m)</th> 
+                <th>D adot. (m)</th> <th>Veloc. (m/s)</th> <th>J (m/m)</th> <th>ΔCota (m)</th> <th>Comp. (m)</th> 
+                <th>Perda (m)</th> <th>Pressão Disp. (m)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Resultados preenchidos via JS -->
+        </tbody>
+    </table>
+
+    <script>
+        function calcular() {
+            // Capturar inputs
+            let trecho = document.getElementById('trecho').value;
+            let somaP = parseFloat(document.getElementById('somaP').value);
+
+            // Fórmulas (exemplo para água fria)
+            let Q_ls = Math.sqrt(somaP) * 0.3;
+            let Q_m3s = Q_ls / 1000;
+            let D_m = Math.sqrt(4 * Q_m3s / Math.PI);
+            let D_mm = D_m * 1000;
+            let D_adot = 0.06; // Exemplo fixo (deverá ser input ou calculado)
+            let V = (Q_m3s * 4) / (Math.pow(D_adot, 2) * Math.PI);
+            let J = 0.000859 * Math.pow(Q_m3s, 1.75) * Math.pow(D_adot, -4.75);
+
+            // Inserir na tabela
+            let tbody = document.querySelector('#resultados tbody');
+            tbody.innerHTML += `
+                <tr>
+                    <td>${trecho}</td> <td>${somaP}</td> <td>${Q_ls.toFixed(2)}</td> <td>${Q_m3s.toFixed(6)}</td>
+                    <td>${D_mm.toFixed(1)}</td> <td>${D_m.toFixed(3)}</td> <td>${D_adot}</td> <td>${V.toFixed(2)}</td>
+                    <td>${J.toFixed(6)}</td> <td>1.14</td> <td>2.94</td> <td>${(J * 2.94).toFixed(2)}</td> <td>...</td>
+                </tr>
+            `;
+        }
+    </script>
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQpK0HqXY_ha2WaKtBAZWgg9AcN_R7Bd1o6NHP_IGrFAtzXICysDwpYQ-pmf-Mcjw/pubhtml?widget=true&amp;headers=false"></iframe>
+</body>
+</html>
