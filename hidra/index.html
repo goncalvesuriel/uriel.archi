@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HidraCalc | a calculadora da arq&urb</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* O CSS permanece o mesmo de antes */
+        :root {
+            --background-color: #1a1a1a;
+            --surface-color: #2c2c2c;
+            --primary-color: #00aaff;
+            --text-color: #f0f0f0;
+            --text-secondary-color: #a0a0a0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 40px 20px;
+        }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .logo-icon { width: 120px; height: auto; margin-bottom: 20px; }
+        .logo-text h1 { font-size: 3rem; font-weight: 700; }
+        .logo-text span { color: var(--primary-color); }
+        .calculators-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; }
+        .card { background-color: var(--surface-color); border-radius: 12px; padding: 30px; text-decoration: none; color: var(--text-color); border: 1px solid transparent; cursor: pointer; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .card:hover { transform: translateY(-8px); border-color: var(--primary-color); }
+        .card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; font-weight: 300; color: var(--text-secondary-color); }
+        .frame-container { width: 100%; margin-top: 50px; border-radius: 12px; overflow: hidden; background-color: var(--surface-color); max-height: 0; opacity: 0; transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out; }
+        .frame-container.visible { max-height: 100vh; opacity: 1; }
+        #calculator-frame { width: 100%; height: 80vh; border: none; }
+        .placeholder { padding: 40px; text-align: center; color: var(--text-secondary-color); }
+        .footer { text-align: center; font-size: 0.9rem; color: var(--text-secondary-color); margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--surface-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="logo-hidra.png" alt="Logo HidraCalc" class="logo-icon">
+            <div class="logo-text">
+                <h1>Hidra<span>Calc</span></h1>
+            </div>
+        </header>
+
+        <main>
+            <div class="calculators-grid">
+                <div class="card" data-src="alimentacao.html">
+                    <h2>Alimentação Predial</h2>
+                    <p>Dimensionamento de ramais e colunas de alimentação.</p>
+                </div>
+                <div class="card" data-src="agua-fria.html">
+                    <h2>Água Fria</h2>
+                    <p>Cálculo de diâmetros e perda de carga para a rede.</p>
+                </div>
+                <div class="card" data-src="agua-quente.html">
+                    <h2>Água Quente</h2>
+                    <p>Dimensionamento da rede de distribuição de água quente.</p>
+                </div>
+                <div class="card" data-src="esgoto.html">
+                    <h2>Esgoto Sanitário</h2>
+                    <p>Cálculo de diâmetros e declividades para a rede.</p>
+                </div>
+                <div class="card" data-src="aguas-pluviais.html">
+                    <h2>Águas Pluviais</h2>
+                    <p>Dimensionamento de calhas, condutores e redes.</p>
+                </div>
+            </div>
+
+            <section id="frame-container" class="frame-container">
+                <div id="frame-placeholder" class="placeholder">
+                    <h2>Selecione uma calculadora acima para começar.</h2>
+                </div>
+                <iframe id="calculator-frame" title="Calculadora Hidráulica"></iframe>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <p>a calculadora da arq&urb 2023.2</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const frameContainer = document.getElementById('frame-container');
+            const calculatorFrame = document.getElementById('calculator-frame');
+            const framePlaceholder = document.getElementById('frame-placeholder');
+            const cards = document.querySelectorAll('.card');
+
+            // Inicia com o iframe escondido e o placeholder visível
+            calculatorFrame.style.display = 'none';
+
+            // Adiciona um "escutador" de clique para cada card
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const url = card.getAttribute('data-src');
+                    if (url) {
+                        loadCalculator(url);
+                    }
+                });
+            });
+
+            function loadCalculator(url) {
+                framePlaceholder.style.display = 'none';
+                calculatorFrame.style.display = 'block';
+                calculatorFrame.src = url;
+                frameContainer.classList.add('visible');
+
+                setTimeout(() => {
+                    frameContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

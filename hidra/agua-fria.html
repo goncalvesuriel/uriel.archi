@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Água Fria - HidraCalc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Tema Escuro e Estilos Globais (Consistente com o index.html) --- */
+        :root {
+            --background-color: #1a1a1a;
+            --surface-color: #2c2c2c;
+            --primary-color: #00aaff;
+            --text-color: #f0f0f0;
+            --text-secondary-color: #a0a0a0;
+            --danger-color: #ff4d4d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        
+        h1 span { color: var(--primary-color); }
+
+        /* --- Card de Entradas --- */
+        .input-card {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group { display: flex; flex-direction: column; }
+
+        .input-group label {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-secondary-color);
+        }
+
+        .input-group input {
+            background-color: var(--background-color);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover { background-color: #0088cc; }
+
+        /* --- Tabela de Resultados --- */
+        .table-wrapper { overflow-x: auto; } /* Para rolagem em telas pequenas */
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #333;
+            font-weight: 600;
+        }
+        
+        tbody tr:nth-child(odd) { background-color: var(--surface-color); }
+
+        .velocity-warning { color: var(--danger-color); font-weight: bold; }
+        
+        /* --- Botão de Navegação --- */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Voltar ao Menu</a>
+        <h1>Dimensionamento de <span>Água Fria</span></h1>
+        
+        <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="trecho">Nome do Trecho</label>
+                    <input type="text" id="trecho" placeholder="Ex: Ramal Chuveiro">
+                </div>
+                <div class="input-group">
+                    <label for="somaP">Somatório dos Pesos (ΣP)</label>
+                    <input type="number" id="somaP" step="0.1" placeholder="Ex: 2.7">
+                </div>
+                <div class="input-group">
+                    <label for="comprimento">Comprimento Real (m)</label>
+                    <input type="number" id="comprimento" step="0.1" placeholder="Ex: 15.5">
+                </div>
+                <div class="input-group">
+                    <label for="deltaCota">Diferença de Cota (ΔCota)</label>
+                    <input type="number" id="deltaCota" step="0.1" placeholder="Ex: 2.8">
+                </div>
+                 <div class="input-group">
+                    <label for="pressaoInicial">Pressão Inicial no Trecho (m.c.a)</label>
+                    <input type="number" id="pressaoInicial" step="0.1" placeholder="Ex: 15.0">
+                </div>
+            </div>
+            <div class="actions">
+                <button onclick="adicionarTrecho()">Adicionar Trecho à Tabela</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="resultados">
+                <thead>
+                    <tr>
+                        <th>Trecho</th>
+                        <th>ΣP</th>
+                        <th>Q (L/s)</th>
+                        <th>D Mín. (mm)</th>
+                        <th>D Adot. (mm)</th>
+                        <th>Veloc. (m/s)</th>
+                        <th>J (m/m)</th>
+                        <th>Perda (m.c.a)</th>
+                        <th>Pressão Final (m.c.a)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // NOVO: Array com diâmetros comerciais de tubos de PVC soldável (em mm)
+        const diametrosComerciais = [20, 25, 32, 40, 50, 60, 75, 85, 110];
+
+        function selecionarDiametroAdotado(diametroCalculado_mm) {
+            // Encontra o primeiro diâmetro comercial que é MAIOR ou IGUAL ao calculado
+            for (let d of diametrosComerciais) {
+                if (d >= diametroCalculado_mm) {
+                    return d; // Retorna o diâmetro encontrado
+                }
+            }
+            return diametrosComerciais[diametrosComerciais.length - 1]; // Se for muito grande, retorna o maior
+        }
+
+        function adicionarTrecho() {
+            // 1. Capturar todos os inputs do usuário
+            const trecho = document.getElementById('trecho').value || 'Não definido';
+            const somaP = parseFloat(document.getElementById('somaP').value) || 0;
+            const comprimento = parseFloat(document.getElementById('comprimento').value) || 0;
+            const deltaCota = parseFloat(document.getElementById('deltaCota').value) || 0;
+            const pressaoInicial = parseFloat(document.getElementById('pressaoInicial').value) || 0;
+
+            if (somaP === 0) {
+                alert("Por favor, insira o Somatório dos Pesos (ΣP).");
+                return;
+            }
+
+            // 2. Fórmulas de Dimensionamento
+            // Fórmula da NBR 5626 para vazão
+            const Q_ls = 0.3 * Math.sqrt(somaP);
+            const Q_m3s = Q_ls / 1000;
+
+            // Diâmetro MÍNIMO para uma velocidade MÁXIMA de 2.5 m/s (pode ser ajustado)
+            // V = Q/A  =>  A = Q/V  =>  π*D²/4 = Q/V  =>  D = sqrt(4*Q / (π*V))
+            const velMax = 2.5; 
+            const D_min_m = Math.sqrt((4 * Q_m3s) / (Math.PI * velMax));
+            const D_min_mm = D_min_m * 1000;
+
+            // Seleção do diâmetro comercial
+            const D_adot_mm = selecionarDiametroAdotado(D_min_mm);
+            const D_adot_m = D_adot_mm / 1000;
+
+            // Recálculo da velocidade REAL com o diâmetro adotado
+            const area_m2 = Math.PI * Math.pow(D_adot_m / 2, 2);
+            const V_ms = Q_m3s / area_m2;
+
+            // Perda de carga (Fórmula Universal - Hazen-Williams para C=150 - PVC)
+            // J = 10.67 * (Q^1.852) / (C^1.852 * D^4.87)
+            const C_Hazen = 150; // Coeficiente para PVC
+            const J_m_por_m = 10.67 * Math.pow(Q_m3s, 1.852) / (Math.pow(C_Hazen, 1.852) * Math.pow(D_adot_m, 4.87));
+            
+            // Perda de carga total no trecho
+            const perdaDeCarga = J_m_por_m * comprimento;
+
+            // Cálculo da pressão final disponível
+            const pressaoFinal = pressaoInicial - perdaDeCarga - deltaCota;
+
+            // 3. Inserir a nova linha na tabela (método mais seguro e eficiente)
+            const tbody = document.querySelector('#resultados tbody');
+            const novaLinha = document.createElement('tr');
+
+            // Coluna Velocidade com aviso de cor
+            let velocidadeHTML = V_ms.toFixed(2);
+            if (V_ms > velMax) {
+                velocidadeHTML = `<span class="velocity-warning">${V_ms.toFixed(2)}</span>`;
+            }
+
+            novaLinha.innerHTML = `
+                <td>${trecho}</td>
+                <td>${somaP.toFixed(2)}</td>
+                <td>${Q_ls.toFixed(3)}</td>
+                <td>${D_min_mm.toFixed(2)}</td>
+                <td>${D_adot_mm}</td>
+                <td>${velocidadeHTML}</td>
+                <td>${J_m_por_m.toFixed(5)}</td>
+                <td>${perdaDeCarga.toFixed(2)}</td>
+                <td>${pressaoFinal.toFixed(2)}</td>
+            `;
+            
+            tbody.appendChild(novaLinha);
+            
+            // Limpa os campos para o próximo lançamento
+            document.getElementById('trecho').value = '';
+            document.getElementById('somaP').value = '';
+        }
+    </script>
+
+</body>
+</html>
