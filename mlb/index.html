@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uriel.archi / mlb - DevLog</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --accent-color: #bb86fc; 
+            --secondary-text: #a0a0a0;
+            --card-bg: #1e1e1e;
+            --status-done: #03dac6;
+            --status-process: #ffb74d;
+            --warning-bg: #cf6679;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 15px;
+            color: #fff;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--secondary-text);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* ÁREA DE CONTEXTO DO PROJETO */
+        .project-context {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .context-highlight {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* ALERTA DE DESENVOLVIMENTO */
+        .dev-alert {
+            background-color: rgba(207, 102, 121, 0.15);
+            border: 1px solid var(--warning-bg);
+            color: #ffcccb;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .links-area {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: var(--bg-color);
+            background-color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Lista de Atualizações */
+        .changelog {
+            list-style: none;
+            padding: 0;
+        }
+
+        .changelog-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: 10px;
+            letter-spacing: 1px;
+        }
+
+        .tag-done {
+            background-color: rgba(3, 218, 198, 0.1);
+            color: var(--status-done);
+            border: 1px solid var(--status-done);
+        }
+
+        .tag-process {
+            background-color: rgba(255, 183, 77, 0.1);
+            color: var(--status-process);
+            border: 1px solid var(--status-process);
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .item-desc {
+            color: var(--secondary-text);
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 400px;
+            background-color: #080808; 
+            margin-top: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #444;
+            color: #555;
+            font-family: monospace;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+            padding-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="brand">uriel.archi / mlb</div>
+            <div style="font-size: 0.9rem; color: #666;">v.0.2.beta</div>
+        </header>
+
+        <section class="intro">
+            <h1>Centro Comunitário MLB</h1>
+            <p style="color: var(--secondary-text); font-size: 1.1rem; margin-top: -10px;">Estudo preliminar e desenvolvimento técnico.</p>
+        </section>
+
+        <section class="project-context">
+            <div class="dev-alert">
+                <span>⚠️</span>
+                <div>
+                    <strong>Em Desenvolvimento (Work in Progress)</strong><br>
+                    Este projeto foi apresentado em banca preliminar e, no momento, passa por uma reestruturação técnica baseada nas críticas recebidas, focando em eficiência estrutural e proteção contra intempéries.
+                </div>
+            </div>
+
+            <h2>Sobre o Projeto</h2>
+            <p>
+                Desenvolvido no âmbito acadêmico da <span class="context-highlight">UFMG (Escola de Arquitetura)</span>, este projeto propõe a criação de um Centro Comunitário destinado a atividades sociais, oficinas e convivência. O programa de necessidades foi elaborado para atender demandas de flexibilidade espacial, exigindo grandes vãos livres e áreas de integração.
+            </p>
+
+            <h3>Processo Criativo e Materialidade</h3>
+            <p>
+                A concepção parte da premissa da arquitetura social e de baixo impacto ambiental. O sistema construtivo eleito foi a alvenaria estrutural de <span class="context-highlight">tijolo ecológico (solo-cimento)</span>, que dispensa queima e valoriza a mão de obra local (possibilidade de mutirão).
+            </p>
+            <p>
+                Para a cobertura, buscou-se referências na obra do engenheiro uruguaio <strong>Eladio Dieste</strong> e na técnica da Cerâmica Armada. O estudo aprofundado das curvas catenárias e da geometria funicular (inspirado também nos modelos de Gaudí) orientou a transição de uma cobertura convencional para um sistema de abóbadas eficientes que trabalham puramente à compressão.
+            </p>
+        </section>
+
+        <section class="links-area">
+            <a href="https://docs.google.com/presentation/d/17H3_mZndYGSQnZXwgKxl9RnFlf1xZFw8nKH_xLUfVRo/edit" class="btn btn-outline" target="_blank">📄 PDF da Apresentação (Preliminar)</a>
+            <a href="#" class="btn" target="_blank">🚀 Render Final (Em breve)</a>
+        </section>
+
+        <section>
+            <h2>Status de Ajustes</h2>
+            <p style="color: #888; margin-bottom: 30px;">
+                Após a apresentação inicial, o projeto está sendo refinado para atender às críticas de viabilidade construtiva e conforto ambiental. Abaixo, o log de alterações:
+            </p>
+
+            <ul class="changelog">
+                
+                <li class="changelog-item">
+                    <div class="item-title">
+                        Proteção da Chuva e Intempéries
+                        <span class="tag tag-done">Finalizado</span>
+                    </div>
+                    <div class="item-desc">
+                        Uma das críticas centrais foi a exposição da alvenaria de terra. Foi adicionado um <strong>balanço de concreto (marquise)</strong> conectado à cinta de amarração e um beiral curvo, garantindo a proteção das fachadas ("chapéu") e o travamento estrutural.
+                    </div>
+                </li>
+
+                <li class="changelog-item">
+                    <div class="item-title">
+                        Níveis e Caminhamento
+                        <span class="tag tag-done">Finalizado</span>
+                    </div>
+                    <div class="item-desc">
+                        Refinamento da topografia e fluxos. Adição de novos caminhos e regularização das rampas de acesso para garantir acessibilidade universal.
+                    </div>
+                </li>
+
+                <li class="changelog-item">
+                    <div class="item-title">
+                        Redimensionamento de Aberturas
+                        <span class="tag tag-done">Finalizado</span>
+                    </div>
+                    <div class="item-desc">
+                        As esquadrias foram recalculadas para seguir a modulação do tijolo ecológico, evitando cortes desnecessários na obra e otimizando a execução dos arcos de descarga.
+                    </div>
+                </li>
+
+                <li class="changelog-item">
+                    <div class="item-title">
+                        Sistema de Cobertura (Abóbada)
+                        <span class="tag tag-process">Em Processo</span>
+                    </div>
+                    <div class="item-desc">
+                        <p>Originalmente, o projeto previa uma abóbada de berço (semicírculo) pela facilidade geométrica. Contudo, a análise estrutural apontou ineficiências no empuxo lateral.</p>
+                        <p style="border-left: 2px solid #555; padding-left: 10px; margin-top: 10px; font-style: italic; color: #ccc;">
+                            "Por coerência e eficiência estrutural, estou alterando a geometria para uma <strong>abóbada catenária</strong> (flecha entre 15-20% do vão). Isso otimiza o uso do material cerâmico trabalhando à compressão pura. O processo envolve modelagem paramétrica baseada nos estudos de correntes de Antoni Gaudí."
+                        </p>
+                    </div>
+                </li>
+
+            </ul>
+        </section>
+
+        <div id="canvas-container">
+            [ Espaço reservado para o Canvas Three.js ]
+        </div>
+
+        <footer>
+            &copy; 2025 Uriel Gonçalves. Arquitetura e Urbanismo UFMG.
+        </footer>
+    </div>
+
+</body>
+</html>
